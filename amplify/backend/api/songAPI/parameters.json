@@ -1,0 +1,11 @@
+{
+  "AppSyncApiName": "songAPI",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authmanomemo053e4962",
+      "Outputs.UserPoolId"
+    ]
+  }
+}
