@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "manomemo053e4962": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
