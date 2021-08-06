@@ -39,3 +39,8 @@
   
 }
 
+.ourAudioPlayer {
+  display: flex;
+  justify-content: center;
+}
+

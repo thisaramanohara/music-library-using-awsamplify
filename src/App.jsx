@@ -1,11 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-import Amplify, {API, graphqlOperation} from 'aws-amplify';
+import Amplify, {API, graphqlOperation, Storage} from 'aws-amplify';
 import awsconfig from './aws-exports';
 import {AmplifySignOut, withAuthenticator } from '@aws-amplify/ui-react';
 import { listSongs } from './graphql/queries';
 import { useEffect, useState } from 'react';
 import {Paper, IconButton} from '@material-ui/core'
+
+import ReactPlayer from 'react-player'
 
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -18,6 +20,7 @@ function App() {
 
   const [songs, setSongs] = useState([])
   const [songPlaying, setSongPlaying] = useState('')
+  const [audioURL, setAudioURL] = useState('');
 
   useEffect(()=> {
     fetchSong()
@@ -28,8 +31,22 @@ function App() {
       setSongPlaying('')
       return
     }
-    setSongPlaying(idx)
-    return
+
+    const songFilePath = songs[idx].filePath;
+
+    try{
+      const fileAccessURL = await Storage.get(songFilePath, {expires:60})
+      console.log('access URL ',fileAccessURL);
+      setSongPlaying(idx)
+      setAudioURL(fileAccessURL)
+      return
+    }catch(error) {
+      console.error('error accessing the file from s3',error);
+      setAudioURL('')
+      setSongPlaying('')
+    }
+
+    
   }
 
   const fetchSong = async () => {
@@ -87,6 +104,19 @@ function App() {
                 </div>
                 <div className="songDescription">{song.description}</div>
               </div>
+              {
+                songPlaying === idx ? (
+                  <div className='ourAudioPlayer'>
+                    <ReactPlayer
+                      url={audioURL}
+                      controls
+                      playing
+                      height="50px"
+                      onPause={()=> toggleSong(idx)}
+                    />
+                  </div> 
+                ) : null
+              }
             </Paper>
           )
         })}
