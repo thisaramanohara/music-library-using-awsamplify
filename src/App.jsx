@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import {Paper, IconButton} from '@material-ui/core'
 
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 Amplify.configure(awsconfig);
 
@@ -44,6 +45,13 @@ function App() {
               <div className="songCard">
                 <IconButton aria-label="play">
                   <PlayArrowIcon />
+                </IconButton>
+                <div>
+                  <div className="songTitle">{song.title}</div>
+                  <div className="songOwner">{song.owner}</div>
+                </div>
+                <IconButton aria-label="like">
+                  <FavoriteIcon />
                 </IconButton>
               </div>
             </Paper>
